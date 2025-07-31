@@ -35,10 +35,18 @@ class TokenCalculator {
     const outputTokens = TokenCalculatorUtils.estimateTokens(outputText);
     const cachedTokens = Math.floor(inputTokens * 0.1); // Assume 10% dos tokens de entrada como cache
 
+    // Converter preços por milhão para preços por token individual
+    const inputPricePerToken =
+      TokenCalculatorUtils.convertPricePerMillionToPerToken(inputTokenPrice);
+    const outputPricePerToken =
+      TokenCalculatorUtils.convertPricePerMillionToPerToken(outputTokenPrice);
+    const cachedPricePerToken =
+      TokenCalculatorUtils.convertPricePerMillionToPerToken(cachedTokenPrice);
+
     // Calcular custos individuais
-    const inputCost = inputTokens * inputTokenPrice;
-    const outputCost = outputTokens * outputTokenPrice;
-    const cachedCost = cachedTokens * cachedTokenPrice;
+    const inputCost = inputTokens * inputPricePerToken;
+    const outputCost = outputTokens * outputPricePerToken;
+    const cachedCost = cachedTokens * cachedPricePerToken;
 
     // Custo por operação
     const costPerOperation = inputCost + outputCost + cachedCost;
@@ -56,19 +64,22 @@ class TokenCalculator {
       breakdown: {
         input: {
           tokens: inputTokens,
-          pricePerToken: inputTokenPrice,
+          pricePerToken: inputPricePerToken,
+          pricePerMillion: inputTokenPrice,
           cost: inputCost,
           totalCost: inputCost * quantity,
         },
         output: {
           tokens: outputTokens,
-          pricePerToken: outputTokenPrice,
+          pricePerToken: outputPricePerToken,
+          pricePerMillion: outputTokenPrice,
           cost: outputCost,
           totalCost: outputCost * quantity,
         },
         cached: {
           tokens: cachedTokens,
-          pricePerToken: cachedTokenPrice,
+          pricePerToken: cachedPricePerToken,
+          pricePerMillion: cachedTokenPrice,
           cost: cachedCost,
           totalCost: cachedCost * quantity,
         },

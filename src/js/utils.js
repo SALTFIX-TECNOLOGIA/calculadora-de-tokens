@@ -6,8 +6,8 @@
 // Constantes da aplicação
 const CONSTANTS = {
   TOKEN_ESTIMATION_FACTOR: 0.75, // Fator aproximado para estimar tokens (1 token ≈ 0.75 palavras)
-  MIN_TOKEN_PRICE: 0.000001,
-  MAX_TOKEN_PRICE: 1.0,
+  MIN_TOKEN_PRICE_PER_MILLION: 0.01, // Preço mínimo por milhão de tokens
+  MAX_TOKEN_PRICE_PER_MILLION: 1000.0, // Preço máximo por milhão de tokens
   MIN_QUANTITY: 1,
   MAX_QUANTITY: 1000000,
   DECIMAL_PLACES: 6,
@@ -84,36 +84,83 @@ function estimateTokens(text) {
 }
 
 /**
- * Valida se um valor de preço de token é válido
- * @param {number} price - Preço a ser validado
+ * Valida se um valor de preço de token por milhão é válido
+ * @param {number} pricePerMillion - Preço por milhão de tokens a ser validado
  * @returns {object} - Objeto com resultado da validação
  */
-function validateTokenPrice(price) {
+function validateTokenPrice(pricePerMillion) {
   const result = {
     isValid: true,
     message: "",
-    value: price,
+    value: pricePerMillion,
   };
 
-  if (typeof price !== "number" || isNaN(price)) {
+  if (typeof pricePerMillion !== "number" || isNaN(pricePerMillion)) {
     result.isValid = false;
     result.message = "Preço deve ser um número válido";
     return result;
   }
 
-  if (price < CONSTANTS.MIN_TOKEN_PRICE) {
+  if (pricePerMillion < CONSTANTS.MIN_TOKEN_PRICE_PER_MILLION) {
     result.isValid = false;
-    result.message = `Preço mínimo: $${CONSTANTS.MIN_TOKEN_PRICE}`;
+    result.message = `Preço mínimo: $${CONSTANTS.MIN_TOKEN_PRICE_PER_MILLION}/1M tokens`;
     return result;
   }
 
-  if (price > CONSTANTS.MAX_TOKEN_PRICE) {
+  if (pricePerMillion > CONSTANTS.MAX_TOKEN_PRICE_PER_MILLION) {
     result.isValid = false;
-    result.message = `Preço máximo: $${CONSTANTS.MAX_TOKEN_PRICE}`;
+    result.message = `Preço máximo: $${CONSTANTS.MAX_TOKEN_PRICE_PER_MILLION}/1M tokens`;
     return result;
   }
 
   return result;
+}
+
+/**
+ * Converte preço por milhão de tokens para preço por token individual
+ * @param {number} pricePerMillion - Preço por milhão de tokens
+ * @returns {number} - Preço por token individual
+ */
+function convertPricePerMillionToPerToken(pricePerMillion) {
+  return pricePerMillion / 1000000;
+}
+
+/**
+ * Converte valor de USD para BRL
+ * @param {number} usdValue - Valor em USD
+ * @param {number} exchangeRate - Taxa de câmbio USD para BRL
+ * @returns {number} - Valor em BRL
+ */
+function convertUSDToBRL(usdValue, exchangeRate = 5.5) {
+  return usdValue * exchangeRate;
+}
+
+/**
+ * Formata um valor monetário em Real brasileiro
+ * @param {number} value - Valor a ser formatado
+ * @returns {string} - Valor formatado em BRL
+ */
+function formatCurrencyBRL(value) {
+  if (typeof value !== "number" || isNaN(value)) {
+    return "R$ 0,00";
+  }
+
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 6,
+  }).format(value);
+}
+
+/**
+ * Obtém a taxa de câmbio atual do input
+ * @returns {number} - Taxa de câmbio USD para BRL
+ */
+function getCurrentExchangeRate() {
+  const rateInput = document.getElementById("usdToBrlRate");
+  const rate = parseFloat(rateInput?.value) || 5.5;
+  return rate;
 }
 
 /**
@@ -369,19 +416,19 @@ function validateFormData(formData) {
     errors: [],
   };
 
-  // Validar preços dos tokens
+  // Validar preços dos tokens (agora em $/1M tokens)
   if (!formData.inputTokenPrice || formData.inputTokenPrice <= 0) {
-    result.errors.push("Valor do token de entrada é obrigatório");
+    result.errors.push("Valor do token de entrada é obrigatório ($/1M tokens)");
     result.isValid = false;
   }
 
   if (!formData.outputTokenPrice || formData.outputTokenPrice <= 0) {
-    result.errors.push("Valor do token de saída é obrigatório");
+    result.errors.push("Valor do token de saída é obrigatório ($/1M tokens)");
     result.isValid = false;
   }
 
   if (!formData.cachedTokenPrice || formData.cachedTokenPrice <= 0) {
-    result.errors.push("Valor do token de cache é obrigatório");
+    result.errors.push("Valor do token de cache é obrigatório ($/1M tokens)");
     result.isValid = false;
   }
 
@@ -409,10 +456,14 @@ function validateFormData(formData) {
 window.TokenCalculatorUtils = {
   CONSTANTS,
   formatCurrency,
+  formatCurrencyBRL,
   formatNumber,
   estimateTokens,
   validateTokenPrice,
   validateQuantity,
+  convertPricePerMillionToPerToken,
+  convertUSDToBRL,
+  getCurrentExchangeRate,
   debounce,
   addAnimatedClass,
   removeAnimatedClass,

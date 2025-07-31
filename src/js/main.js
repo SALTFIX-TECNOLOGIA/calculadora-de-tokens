@@ -152,6 +152,17 @@ function setupEventListeners() {
 
   // Atalhos de teclado
   document.addEventListener("keydown", handleKeyboardShortcuts);
+
+  // Listener para taxa de câmbio
+  const exchangeRateInput = document.getElementById("usdToBrlRate");
+  if (exchangeRateInput) {
+    exchangeRateInput.addEventListener(
+      "input",
+      TokenCalculatorUtils.debounce(updateCurrencyConversion, 300)
+    );
+    // Definir valor padrão
+    exchangeRateInput.value = "5.50";
+  }
 }
 
 /**
@@ -257,8 +268,21 @@ function displayResults(result) {
  * Atualiza o resumo executivo
  */
 function updateExecutiveSummary(summary) {
+  // Atualizar custo em USD
   document.getElementById("totalCost").textContent =
     TokenCalculatorUtils.formatCurrency(summary.totalCost);
+
+  // Atualizar custo em BRL
+  const exchangeRate = TokenCalculatorUtils.getCurrentExchangeRate();
+  const totalCostBRL = TokenCalculatorUtils.convertUSDToBRL(
+    summary.totalCost,
+    exchangeRate
+  );
+  const totalCostBRLElement = document.getElementById("totalCostBRL");
+  if (totalCostBRLElement) {
+    totalCostBRLElement.textContent =
+      TokenCalculatorUtils.formatCurrencyBRL(totalCostBRL);
+  }
 
   document.getElementById("totalTokens").textContent =
     TokenCalculatorUtils.formatNumber(summary.totalTokens);
@@ -491,6 +515,15 @@ function hideLoadingState() {
     submitBtn.disabled = false;
     submitBtn.innerHTML = "🧮 Calcular Custos";
     submitBtn.classList.remove("loading");
+  }
+}
+
+/**
+ * Atualiza a conversão de moeda quando a taxa de câmbio muda
+ */
+function updateCurrencyConversion() {
+  if (appState.currentResult) {
+    updateExecutiveSummary(appState.currentResult.summary);
   }
 }
 

@@ -12,6 +12,9 @@
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Iconify Icons -->
+    <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+
     <!-- CSS Customizado -->
     <link rel="stylesheet" href="css/styles.css" />
 
@@ -22,247 +25,594 @@
           extend: {
             colors: {
               primary: {
-                50: "#eff6ff",
-                500: "#3b82f6",
-                600: "#2563eb",
-                700: "#1d4ed8",
+                50: "#f0f9ff",
+                100: "#e0f2fe",
+                200: "#bae6fd",
+                300: "#7dd3fc",
+                400: "#38bdf8",
+                500: "#0ea5e9",
+                600: "#0284c7",
+                700: "#0369a1",
+                800: "#075985",
+                900: "#0c4a6e",
               },
+              dark: {
+                50: "#f8fafc",
+                100: "#f1f5f9",
+                200: "#e2e8f0",
+                300: "#cbd5e1",
+                400: "#94a3b8",
+                500: "#64748b",
+                600: "#475569",
+                700: "#334155",
+                800: "#1e293b",
+                900: "#0f172a",
+                950: "#020617",
+              },
+              success: {
+                500: "#10b981",
+                600: "#059669",
+              },
+              warning: {
+                500: "#f59e0b",
+                600: "#d97706",
+              },
+              error: {
+                500: "#ef4444",
+                600: "#dc2626",
+              },
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+            boxShadow: {
+              gpt: "0 2px 16px 0 rgba(0,0,0,0.1)",
+              "gpt-hover": "0 4px 20px 0 rgba(0,0,0,0.15)",
+            },
+            borderRadius: {
+              xl: "12px",
+              "2xl": "16px",
             },
           },
         },
       };
     </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="bg-gray-50 min-h-screen">
+  <body
+    class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen font-sans"
+  >
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b">
+    <header
+      class="bg-white/80 backdrop-blur-md shadow-gpt border-b border-gray-200/50 sticky top-0 z-50"
+    >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-4">
-          <div class="flex items-center">
-            <h1 class="text-2xl font-bold text-gray-900">
-              🧮 Calculadora de Tokens
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-lg"
+            >
+              <iconify-icon
+                icon="hugeicons:calculator"
+                class="text-white text-lg"
+              ></iconify-icon>
+            </div>
+            <h1 class="text-xl font-semibold text-gray-900">
+              Calculadora de Tokens
             </h1>
           </div>
-          <div class="text-sm text-gray-500">v1.0.0</div>
+          <div class="flex items-center gap-4">
+            <!-- Conversor Real -->
+            <div
+              class="hidden sm:flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2"
+            >
+              <iconify-icon
+                icon="twemoji:flag-brazil"
+                class="text-sm"
+              ></iconify-icon>
+              <input
+                type="number"
+                id="usdToBrlRate"
+                placeholder="5.50"
+                step="0.01"
+                class="w-16 text-sm bg-transparent border-none outline-none font-medium"
+                title="Taxa USD para BRL"
+              />
+              <span class="text-xs text-gray-500">R$/USD</span>
+            </div>
+            <div class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+              v2.0.0
+            </div>
+          </div>
         </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <!-- Formulário de Entrada -->
-        <div class="bg-white rounded-lg shadow-sm border p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">
-            Configuração de Tokens
-          </h2>
+        <div
+          class="bg-white rounded-2xl shadow-gpt border border-gray-200/50 p-6 hover:shadow-gpt-hover transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 mb-6">
+            <div
+              class="w-6 h-6 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center"
+            >
+              <iconify-icon
+                icon="hugeicons:settings-02"
+                class="text-white text-sm"
+              ></iconify-icon>
+            </div>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Configuração de Tokens
+            </h2>
+          </div>
 
           <form id="tokenForm" class="space-y-6">
             <!-- Valores dos Tokens -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label
-                  for="inputTokenPrice"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Valor Token Entrada ($)
-                </label>
-                <input
-                  type="number"
-                  id="inputTokenPrice"
-                  step="0.000001"
-                  placeholder="0.000003"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
+            <div class="space-y-4">
+              <h3
+                class="text-sm font-medium text-gray-900 flex items-center gap-2"
+              >
+                <iconify-icon
+                  icon="hugeicons:dollar-circle"
+                  class="text-primary-500"
+                ></iconify-icon>
+                Preços por Milhão de Tokens
+              </h3>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="space-y-2">
+                  <label
+                    for="inputTokenPrice"
+                    class="block text-xs font-medium text-gray-600 uppercase tracking-wide"
+                  >
+                    <iconify-icon
+                      icon="hugeicons:inbox"
+                      class="inline mr-1 text-green-500"
+                    ></iconify-icon>
+                    Entrada
+                  </label>
+                  <div class="relative">
+                    <div
+                      class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                      <span class="text-gray-400 text-sm">$</span>
+                    </div>
+                    <input
+                      type="number"
+                      id="inputTokenPrice"
+                      step="0.01"
+                      placeholder="3.00"
+                      class="w-full pl-7 pr-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                    />
+                  </div>
+                </div>
 
-              <div>
-                <label
-                  for="outputTokenPrice"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Valor Token Saída ($)
-                </label>
-                <input
-                  type="number"
-                  id="outputTokenPrice"
-                  step="0.000001"
-                  placeholder="0.000015"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
+                <div class="space-y-2">
+                  <label
+                    for="outputTokenPrice"
+                    class="block text-xs font-medium text-gray-600 uppercase tracking-wide"
+                  >
+                    <iconify-icon
+                      icon="hugeicons:share-08"
+                      class="inline mr-1 text-blue-500"
+                    ></iconify-icon>
+                    Saída
+                  </label>
+                  <div class="relative">
+                    <div
+                      class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                      <span class="text-gray-400 text-sm">$</span>
+                    </div>
+                    <input
+                      type="number"
+                      id="outputTokenPrice"
+                      step="0.01"
+                      placeholder="15.00"
+                      class="w-full pl-7 pr-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                    />
+                  </div>
+                </div>
 
-              <div>
-                <label
-                  for="cachedTokenPrice"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Valor Token Cache ($)
-                </label>
-                <input
-                  type="number"
-                  id="cachedTokenPrice"
-                  step="0.000001"
-                  placeholder="0.0000015"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
+                <div class="space-y-2">
+                  <label
+                    for="cachedTokenPrice"
+                    class="block text-xs font-medium text-gray-600 uppercase tracking-wide"
+                  >
+                    <iconify-icon
+                      icon="hugeicons:database"
+                      class="inline mr-1 text-purple-500"
+                    ></iconify-icon>
+                    Cache
+                  </label>
+                  <div class="relative">
+                    <div
+                      class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                      <span class="text-gray-400 text-sm">$</span>
+                    </div>
+                    <input
+                      type="number"
+                      id="cachedTokenPrice"
+                      step="0.01"
+                      placeholder="1.50"
+                      class="w-full pl-7 pr-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
             <!-- Exemplos de Texto -->
             <div class="space-y-4">
-              <div>
-                <label
-                  for="inputText"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Exemplo de Texto de Entrada
-                </label>
-                <textarea
-                  id="inputText"
-                  rows="4"
-                  placeholder="Digite aqui o texto de exemplo que será enviado para a IA..."
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                ></textarea>
-                <div class="mt-1 text-xs text-gray-500">
-                  Tokens estimados: <span id="inputTokenCount">0</span>
-                </div>
-              </div>
+              <h3
+                class="text-sm font-medium text-gray-900 flex items-center gap-2"
+              >
+                <iconify-icon
+                  icon="hugeicons:message-02"
+                  class="text-primary-500"
+                ></iconify-icon>
+                Exemplos de Texto
+              </h3>
 
-              <div>
-                <label
-                  for="outputText"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Exemplo de Texto de Saída
-                </label>
-                <textarea
-                  id="outputText"
-                  rows="4"
-                  placeholder="Digite aqui o texto de exemplo que será retornado pela IA..."
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
-                ></textarea>
-                <div class="mt-1 text-xs text-gray-500">
-                  Tokens estimados: <span id="outputTokenCount">0</span>
+              <div class="space-y-4">
+                <div class="space-y-2">
+                  <label
+                    for="inputText"
+                    class="block text-xs font-medium text-gray-600 uppercase tracking-wide"
+                  >
+                    <iconify-icon
+                      icon="hugeicons:user"
+                      class="inline mr-1 text-green-500"
+                    ></iconify-icon>
+                    Prompt do Usuário
+                  </label>
+                  <div class="relative">
+                    <textarea
+                      id="inputText"
+                      rows="3"
+                      placeholder="Ex: Explique como funciona a inteligência artificial..."
+                      class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white resize-none"
+                    ></textarea>
+                    <div
+                      class="absolute bottom-2 right-3 flex items-center gap-2"
+                    >
+                      <div
+                        class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs text-gray-500 border"
+                      >
+                        <iconify-icon
+                          icon="hugeicons:cpu"
+                          class="inline mr-1"
+                        ></iconify-icon>
+                        <span id="inputTokenCount">0</span> tokens
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-2">
+                  <label
+                    for="outputText"
+                    class="block text-xs font-medium text-gray-600 uppercase tracking-wide"
+                  >
+                    <iconify-icon
+                      icon="hugeicons:bot"
+                      class="inline mr-1 text-blue-500"
+                    ></iconify-icon>
+                    Resposta da IA
+                  </label>
+                  <div class="relative">
+                    <textarea
+                      id="outputText"
+                      rows="3"
+                      placeholder="Ex: A inteligência artificial é uma tecnologia que permite..."
+                      class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white resize-none"
+                    ></textarea>
+                    <div
+                      class="absolute bottom-2 right-3 flex items-center gap-2"
+                    >
+                      <div
+                        class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs text-gray-500 border"
+                      >
+                        <iconify-icon
+                          icon="hugeicons:cpu"
+                          class="inline mr-1"
+                        ></iconify-icon>
+                        <span id="outputTokenCount">0</span> tokens
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- Quantidade para Simulação -->
-            <div>
-              <label
-                for="quantity"
-                class="block text-sm font-medium text-gray-700 mb-2"
+            <div class="space-y-4">
+              <h3
+                class="text-sm font-medium text-gray-900 flex items-center gap-2"
               >
-                Quantidade para Simulação
-              </label>
-              <input
-                type="number"
-                id="quantity"
-                min="1"
-                value="1"
-                placeholder="1"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-              <div class="mt-1 text-xs text-gray-500">
-                Simule múltiplos cenários alterando esta quantidade
+                <iconify-icon
+                  icon="hugeicons:analytics-02"
+                  class="text-primary-500"
+                ></iconify-icon>
+                Simulação de Cenários
+              </h3>
+              <div class="space-y-2">
+                <label
+                  for="quantity"
+                  class="block text-xs font-medium text-gray-600 uppercase tracking-wide"
+                >
+                  <iconify-icon
+                    icon="hugeicons:hashtag-01"
+                    class="inline mr-1 text-orange-500"
+                  ></iconify-icon>
+                  Quantidade de Operações
+                </label>
+                <div class="relative">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <iconify-icon
+                      icon="hugeicons:multiply-sign"
+                      class="text-gray-400 text-sm"
+                    ></iconify-icon>
+                  </div>
+                  <input
+                    type="number"
+                    id="quantity"
+                    min="1"
+                    value="1"
+                    placeholder="1"
+                    class="w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all duration-200 bg-gray-50/50 hover:bg-white"
+                  />
+                </div>
+                <p class="text-xs text-gray-500 flex items-center gap-1">
+                  <iconify-icon
+                    icon="hugeicons:information-circle"
+                    class="text-primary-400"
+                  ></iconify-icon>
+                  Simule diferentes volumes de uso para planejamento
+                </p>
               </div>
             </div>
 
             <!-- Botões de Ação -->
-            <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
               <button
                 type="submit"
-                class="flex-1 bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-colors"
+                class="flex-1 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-6 py-3 rounded-xl hover:from-primary-600 hover:to-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl font-medium flex items-center justify-center gap-2"
               >
-                🧮 Calcular Custos
+                <iconify-icon
+                  icon="hugeicons:calculator"
+                  class="text-lg"
+                ></iconify-icon>
+                Calcular Custos
               </button>
               <button
                 type="button"
                 id="clearBtn"
-                class="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                class="flex-1 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500/20 focus:ring-offset-2 transition-all duration-200 font-medium flex items-center justify-center gap-2"
               >
-                🗑️ Limpar
+                <iconify-icon
+                  icon="hugeicons:delete-02"
+                  class="text-lg"
+                ></iconify-icon>
+                Limpar
               </button>
             </div>
           </form>
         </div>
 
         <!-- Área de Resultados -->
-        <div class="bg-white rounded-lg shadow-sm border p-6">
-          <h2 class="text-xl font-semibold text-gray-900 mb-6">
-            Resultados do Cálculo
-          </h2>
+        <div
+          class="bg-white rounded-2xl shadow-gpt border border-gray-200/50 p-6 hover:shadow-gpt-hover transition-all duration-300"
+        >
+          <div class="flex items-center gap-3 mb-6">
+            <div
+              class="w-6 h-6 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center"
+            >
+              <iconify-icon
+                icon="hugeicons:analytics-01"
+                class="text-white text-sm"
+              ></iconify-icon>
+            </div>
+            <h2 class="text-lg font-semibold text-gray-900">
+              Resultados do Cálculo
+            </h2>
+          </div>
 
-          <div id="results" class="hidden">
+          <div id="results" class="hidden space-y-6">
             <!-- Resumo Executivo -->
             <div
-              class="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-6"
+              class="bg-gradient-to-br from-primary-50 to-primary-100/50 border border-primary-200/50 rounded-2xl p-6 relative overflow-hidden"
             >
-              <h3 class="text-lg font-medium text-primary-900 mb-2">
-                💰 Resumo Executivo
-              </h3>
-              <div class="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span class="text-primary-700">Custo Total:</span>
-                  <span id="totalCost" class="font-bold text-primary-900"
-                    >$0.00</span
+              <div
+                class="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-transparent"
+              ></div>
+              <div class="relative">
+                <div class="flex items-center justify-between mb-4">
+                  <h3
+                    class="text-lg font-semibold text-primary-900 flex items-center gap-2"
                   >
+                    <iconify-icon
+                      icon="hugeicons:money-bag-02"
+                      class="text-primary-600"
+                    ></iconify-icon>
+                    Resumo Executivo
+                  </h3>
+                  <div class="tooltip">
+                    <iconify-icon
+                      icon="hugeicons:information-circle"
+                      class="text-primary-500 hover:text-primary-700 cursor-help text-lg"
+                    ></iconify-icon>
+                    <span class="tooltip-text">
+                      Visão geral dos custos totais considerando todos os tipos
+                      de tokens e a quantidade especificada.
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <span class="text-primary-700">Total de Tokens:</span>
-                  <span id="totalTokens" class="font-bold text-primary-900"
-                    >0</span
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div
+                    class="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50"
                   >
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center"
+                      >
+                        <iconify-icon
+                          icon="hugeicons:dollar-circle"
+                          class="text-white text-lg"
+                        ></iconify-icon>
+                      </div>
+                      <div>
+                        <p
+                          class="text-xs font-medium text-gray-600 uppercase tracking-wide"
+                        >
+                          Custo Total USD
+                        </p>
+                        <p
+                          id="totalCost"
+                          class="text-xl font-bold text-gray-900"
+                        >
+                          $0.00
+                        </p>
+                        <p
+                          id="totalCostBRL"
+                          class="text-sm font-medium text-green-600"
+                        >
+                          R$ 0,00
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-white/50"
+                  >
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center"
+                      >
+                        <iconify-icon
+                          icon="hugeicons:cpu"
+                          class="text-white text-lg"
+                        ></iconify-icon>
+                      </div>
+                      <div>
+                        <p
+                          class="text-xs font-medium text-gray-600 uppercase tracking-wide"
+                        >
+                          Total de Tokens
+                        </p>
+                        <p
+                          id="totalTokens"
+                          class="text-xl font-bold text-gray-900"
+                        >
+                          0
+                        </p>
+                        <p class="text-sm text-gray-500">tokens processados</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- Detalhamento -->
             <div class="space-y-4">
-              <div class="border rounded-lg p-4">
-                <h4 class="font-medium text-gray-900 mb-3">
-                  📥 Tokens de Entrada
-                </h4>
+              <div
+                class="border rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <div class="flex items-center justify-between mb-3">
+                  <h4 class="font-medium text-gray-900 flex items-center gap-2">
+                    📥 Tokens de Entrada
+                  </h4>
+                  <div class="tooltip">
+                    <span
+                      class="text-blue-500 hover:text-blue-700 cursor-help text-lg"
+                      >ℹ️</span
+                    >
+                    <span class="tooltip-text">
+                      Tokens consumidos pelo texto de entrada enviado para a IA.
+                      Geralmente têm menor custo que tokens de saída.
+                    </span>
+                  </div>
+                </div>
                 <div class="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span class="text-gray-600">Quantidade:</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-gray-600">🔢 Quantidade:</span>
                     <span id="inputTokensDetail" class="font-medium">0</span>
                   </div>
-                  <div>
-                    <span class="text-gray-600">Custo:</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-gray-600">💰 Custo:</span>
                     <span id="inputCostDetail" class="font-medium">$0.00</span>
                   </div>
                 </div>
               </div>
 
-              <div class="border rounded-lg p-4">
-                <h4 class="font-medium text-gray-900 mb-3">
-                  📤 Tokens de Saída
-                </h4>
+              <div
+                class="border rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <div class="flex items-center justify-between mb-3">
+                  <h4 class="font-medium text-gray-900 flex items-center gap-2">
+                    📤 Tokens de Saída
+                  </h4>
+                  <div class="tooltip">
+                    <span
+                      class="text-blue-500 hover:text-blue-700 cursor-help text-lg"
+                      >ℹ️</span
+                    >
+                    <span class="tooltip-text">
+                      Tokens gerados pela IA como resposta. Normalmente têm
+                      custo mais alto que tokens de entrada.
+                    </span>
+                  </div>
+                </div>
                 <div class="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span class="text-gray-600">Quantidade:</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-gray-600">🔢 Quantidade:</span>
                     <span id="outputTokensDetail" class="font-medium">0</span>
                   </div>
-                  <div>
-                    <span class="text-gray-600">Custo:</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-gray-600">💰 Custo:</span>
                     <span id="outputCostDetail" class="font-medium">$0.00</span>
                   </div>
                 </div>
               </div>
 
-              <div class="border rounded-lg p-4">
-                <h4 class="font-medium text-gray-900 mb-3">
-                  💾 Tokens de Cache
-                </h4>
+              <div
+                class="border rounded-lg p-4 hover:shadow-md transition-shadow"
+              >
+                <div class="flex items-center justify-between mb-3">
+                  <h4 class="font-medium text-gray-900 flex items-center gap-2">
+                    💾 Tokens de Cache
+                  </h4>
+                  <div class="tooltip">
+                    <span
+                      class="text-blue-500 hover:text-blue-700 cursor-help text-lg"
+                      >ℹ️</span
+                    >
+                    <span class="tooltip-text">
+                      Tokens armazenados em cache para otimização. Estimados
+                      como 10% dos tokens de entrada com custo reduzido.
+                    </span>
+                  </div>
+                </div>
                 <div class="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span class="text-gray-600">Quantidade:</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-gray-600">🔢 Quantidade:</span>
                     <span id="cachedTokensDetail" class="font-medium">0</span>
                   </div>
-                  <div>
-                    <span class="text-gray-600">Custo:</span>
+                  <div class="flex items-center gap-2">
+                    <span class="text-gray-600">💰 Custo:</span>
                     <span id="cachedCostDetail" class="font-medium">$0.00</span>
                   </div>
                 </div>
@@ -271,27 +621,39 @@
 
             <!-- Simulação de Múltiplos Cenários -->
             <div id="multipleScenarios" class="mt-6 hidden">
-              <h4 class="font-medium text-gray-900 mb-3">
-                📊 Simulação de Múltiplos Cenários
-              </h4>
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-medium text-gray-900 flex items-center gap-2">
+                  📊 Simulação de Múltiplos Cenários
+                </h4>
+                <div class="tooltip">
+                  <span
+                    class="text-blue-500 hover:text-blue-700 cursor-help text-lg"
+                    >ℹ️</span
+                  >
+                  <span class="tooltip-text">
+                    Projeções de custos para diferentes quantidades de
+                    operações, facilitando o planejamento de orçamento.
+                  </span>
+                </div>
+              </div>
               <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                   <thead class="bg-gray-50">
                     <tr>
                       <th
-                        class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                        class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase flex items-center gap-1"
                       >
-                        Quantidade
+                        🔢 Quantidade
                       </th>
                       <th
-                        class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                        class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase flex items-center gap-1"
                       >
-                        Custo Total
+                        💰 Custo Total
                       </th>
                       <th
-                        class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase"
+                        class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase flex items-center gap-1"
                       >
-                        Tokens Totais
+                        🎯 Tokens Totais
                       </th>
                     </tr>
                   </thead>

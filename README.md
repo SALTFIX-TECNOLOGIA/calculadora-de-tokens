@@ -27,9 +27,9 @@ Uma calculadora interativa para estimativa de custos de tokens de IA, desenvolvi
 
 1. **Preencha os valores dos tokens:**
 
-   - Valor do token de entrada (ex: $0.000003)
-   - Valor do token de saída (ex: $0.000015)
-   - Valor do token de cache (ex: $0.0000015)
+   - Valor do token de entrada (ex: $3.00 por 1M tokens)
+   - Valor do token de saída (ex: $15.00 por 1M tokens)
+   - Valor do token de cache (ex: $1.50 por 1M tokens)
 
 2. **Adicione exemplos de texto:**
 
@@ -89,10 +89,13 @@ A aplicação estima o número de tokens baseado em uma aproximação simples:
 ### Cálculo de Custos
 
 ```javascript
+// Conversão de preço por milhão para preço por token
+preçoPorToken = preçoPorMilhão / 1.000.000
+
 // Custo por tipo de token
-custoEntrada = tokensEntrada × preçoTokenEntrada
-custoSaída = tokensSaída × preçoTokenSaída
-custoCache = tokensCache × preçoTokenCache
+custoEntrada = tokensEntrada × (preçoEntradaPorMilhão / 1.000.000)
+custoSaída = tokensSaída × (preçoSaídaPorMilhão / 1.000.000)
+custoCache = tokensCache × (preçoCachePorMilhão / 1.000.000)
 
 // Custo total
 custoTotal = (custoEntrada + custoSaída + custoCache) × quantidade
@@ -153,9 +156,9 @@ A aplicação salva automaticamente:
 
 ### Preços de Tokens
 
-- Valores entre $0.000001 e $1.00
+- Valores entre $0.01 e $1000.00 por milhão de tokens
 - Formato numérico válido
-- Precisão de até 6 casas decimais
+- Precisão de até 2 casas decimais
 
 ### Textos
 
