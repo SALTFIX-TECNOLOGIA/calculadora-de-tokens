@@ -266,7 +266,6 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 Para suporte ou dúvidas:
 
 - Abra uma issue no GitHub
-- Consulte a documentação técnica em `docs/`
 
 ---
 
