@@ -1,5 +1,7 @@
 # 🧮 Calculadora de Tokens
 
+![Preview da Calculadora de Tokens](preview.png)
+
 Uma calculadora interativa para estimativa de custos de tokens de IA, desenvolvida com HTML, CSS e JavaScript puro usando Tailwind CSS.
 
 ## 📋 Funcionalidades
